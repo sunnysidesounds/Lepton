@@ -2,7 +2,7 @@
 
   .font-style-base {
     font-family: -apple-system, BlinkMacSystemFont, Segoe WPC, Segoe UI, Ubuntu, Droid Sans, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--text-primary);
   }
 
@@ -12,7 +12,8 @@
   }
 
   .gist-editor-control-button {
-    margin: 5px;
+    margin: 2px;
+    padding: 2px 10px;
     float: right;
   }
 
@@ -84,7 +85,7 @@
   }
 
   .control-button-group {
-    height: 45px;
+    height: 25px;
   }
 
   .gist-editor-customized-tag {

@@ -52,6 +52,25 @@ class GistEditorFormImpl extends Component {
 
     return (
       <form className='gist-editor-form' onSubmit={ handleSubmit }>
+        <div className='control-button-group'>
+          <Button
+            className='gist-editor-control-button'
+            type='submit'
+            bsStyle='default'
+            bsSize="small"
+            disabled={ submitting }>
+            Save
+          </Button>
+          <Button
+            className='gist-editor-control-button'
+            onClick={ handleCancel }
+            bsStyle='default'
+            bsSize="small"
+            disabled={ submitting }>
+            Cancel
+          </Button>
+        </div>
+        <hr/>
         <Field
           name='description'
           type='text'
@@ -68,15 +87,17 @@ class GistEditorFormImpl extends Component {
             className='gist-editor-control-button'
             type='submit'
             bsStyle='default'
+            bsSize="small"
             disabled={ submitting }>
-            Submit
+            Save
           </Button>
           <Button
             className='gist-editor-control-button'
             onClick={ handleCancel }
             bsStyle='default'
+            bsSize="small"
             disabled={ submitting }>
-              Cancel
+            Cancel
           </Button>
         </div>
       </form>
