@@ -9,6 +9,8 @@ import validFilename from 'valid-filename'
 import tipsIcon from './ei-question.svg'
 
 import './index.scss'
+import { AiOutlineSave } from 'react-icons/ai'
+import { ImCancelCircle } from 'react-icons/im'
 
 export const NEW_GIST = 'NEW_GIST'
 export const UPDATE_GIST = 'UPDATE_GIST'
@@ -54,20 +56,20 @@ class GistEditorFormImpl extends Component {
       <form className='gist-editor-form' onSubmit={ handleSubmit }>
         <div className='control-button-group'>
           <Button
-            className='gist-editor-control-button'
-            type='submit'
-            bsStyle='default'
-            bsSize="small"
-            disabled={ submitting }>
-            Save
-          </Button>
-          <Button
-            className='gist-editor-control-button'
+            className='gist-editor-control-button-cancel'
             onClick={ handleCancel }
             bsStyle='default'
             bsSize="small"
             disabled={ submitting }>
-            Cancel
+            <ImCancelCircle /> Cancel
+          </Button>
+          <Button
+            className='gist-editor-control-button-save'
+            type='submit'
+            bsStyle='default'
+            bsSize="small"
+            disabled={ submitting }>
+            <AiOutlineSave /> Save
           </Button>
         </div>
         <hr/>
@@ -84,20 +86,20 @@ class GistEditorFormImpl extends Component {
         <hr/>
         <div className='control-button-group'>
           <Button
-            className='gist-editor-control-button'
-            type='submit'
-            bsStyle='default'
-            bsSize="small"
-            disabled={ submitting }>
-            Save
-          </Button>
-          <Button
-            className='gist-editor-control-button'
+            className='gist-editor-control-button-cancel'
             onClick={ handleCancel }
             bsStyle='default'
             bsSize="small"
             disabled={ submitting }>
-            Cancel
+            <ImCancelCircle /> Cancel
+          </Button>
+          <Button
+            className='gist-editor-control-button-save'
+            type='submit'
+            bsStyle='default'
+            bsSize="small"
+            disabled={ submitting }>
+            <AiOutlineSave /> Save
           </Button>
         </div>
       </form>

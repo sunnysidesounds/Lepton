@@ -108,15 +108,12 @@ export default class CodeArea extends Component {
   renderCodeArea (filename, content, lang, kTabLength) {
     const language = this.adaptedLanguage(filename, lang)
     let htmlContent = ''
-    switch (language) {
-      case 'Jupyter Notebook':
-        htmlContent = this.createJupyterNotebookCodeBlock(content, language, kTabLength)
-        break
-      case 'Markdown':
-        htmlContent = this.createMarkdownCodeBlock(content)
-        break
-      default:
-        htmlContent = this.createHighlightedCodeBlock(content, language, kTabLength)
+    if (language === 'Markdown') {
+      htmlContent = this.createMarkdownCodeBlock(content)
+    } else if (language === 'Jupyter Notebook') {
+      htmlContent = this.createJupyterNotebookCodeBlock(content, language, kTabLength)
+    } else {
+      htmlContent = this.createHighlightedCodeBlock(content, language, kTabLength)
     }
     return (
       <div className='code-area'

@@ -4,6 +4,7 @@ import { descriptionParser } from '../../utilities/parser'
 import { remote } from 'electron'
 import { selectGist, fetchSingleGist, updatescrollRequestStatus } from '../../actions'
 import React, { Component } from 'react'
+import secretIcon from './lock.svg'
 
 import './index.scss'
 
@@ -91,11 +92,18 @@ class NavigationPanelDetails extends Component {
       const { title, description } = descriptionParser(rawDescription)
       const thumbnailTitle = title.length > 0 ? title : description
       const gistId = gist.brief.id
+      const isPublic = gist.brief.public
       snippetThumbnails.push(
         <li className='snippet-thumnail-list-item' key={ gistId } ref={ gistId }>
           <div className={ this.decideSnippetListItemClass(gistId) }
             onClick={ this.handleClicked.bind(this, gistId) }>
-            <div className='snippet-thumnail-description'>{ thumbnailTitle }</div>
+            { isPublic
+              ? <div className='snippet-thumnail-description'>{ thumbnailTitle }</div>
+              : <div>
+                <div key='icon' className='secret-icon' dangerouslySetInnerHTML={{ __html: secretIcon }} />
+                <div className='snippet-thumnail-description'>{ thumbnailTitle }</div>
+              </div>
+            }
           </div>
         </li>
       )

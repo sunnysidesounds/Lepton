@@ -84,3 +84,19 @@
     text-overflow: ellipsis;
   }
 }
+
+.secret-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  position: relative;
+  fill: currentColor;
+  width: 10px;
+  float: left;
+  margin-top: 3px;
+
+  svg {
+    display: block;
+
+  }
+}
