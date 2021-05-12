@@ -458,6 +458,9 @@ class Snippet extends Component {
         <span className='update-date'>
           { 'Last active ' + Moment(gist.brief.updated_at).fromNow() }
         </span>
+        <span className='create-date'>
+          { 'Created on ' + Moment(gist.brief.created_at).format('MMMM DD, YYYY') }
+        </span>
       </div>)
 
     return (

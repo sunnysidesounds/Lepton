@@ -225,6 +225,7 @@ export function fetchSingleGist (oldGist, id) {
     const state = getState()
     return getGitHubApi(GET_SINGLE_GIST)(state.accessToken, id)
       .then((details) => {
+        console.log('gist response', details)
         const newGist = Object.assign(oldGist, { details: details })
         const newGistWithId = {}
         newGistWithId[id] = newGist

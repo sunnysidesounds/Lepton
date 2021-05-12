@@ -237,6 +237,7 @@
   .description-section {
     @extend .font-style-base;
     color: var(--text-secondary);
+    display: none;
 
     a {
       color: rgb(3, 123, 183);
@@ -259,6 +260,7 @@
   }
 
   .custom-tags,
+  .create-date,
   .update-date {
     @extend .font-style-base;
     color: var(--text-secondary);
@@ -284,8 +286,13 @@
     position: relative;
   }
 
+  .create-date {
+    float: right;
+  }
+
   .update-date {
     float: right;
+    margin-left: 20px;
   }
 
   .snippet-progressbar {
@@ -308,6 +315,10 @@
   .markdown-section {
     @extend .font-style-md;
     padding: 15px 20px;
+  }
+
+  .markdown-section h2 {
+    padding-bottom: 5px;
   }
 
   hr {

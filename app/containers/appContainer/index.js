@@ -111,7 +111,7 @@ class AppContainer extends Component {
           updateLocalStorage = { updateLocalStorage }
           updateActiveGistAfterClicked = { updateActiveGistAfterClicked }
           reSyncUserGists = { reSyncUserGists } />
-        <SplitPane split='vertical' minSize={180} maxSize={300} defaultSize={230}>
+        <SplitPane split='vertical' minSize={180} maxSize={300} defaultSize={240}>
           <NavigationPanelDetails />
           <SnippetPanel
             searchIndex = { searchIndex }

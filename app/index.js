@@ -396,7 +396,7 @@ function initUserSession (token) {
       syncLocalPref(newProfile.login)
       logger.debug('-----> after syncLocalPref')
 
-      remote.getCurrentWindow().setTitle(`${newProfile.login} | Lepton`) // update the app title
+      remote.getCurrentWindow().setTitle(`${newProfile.login} | Lepton (custom fork)`) // update the app title
 
       logger.info('[Dispatch] updateUserSession ACTIVE')
       reduxStore.dispatch(updateUserSession({ activeStatus: 'ACTIVE', profile: newProfile }))
