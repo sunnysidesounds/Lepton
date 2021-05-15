@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { remote, ipcRenderer } from 'electron'
 import React, { Component } from 'react'
 
-import dojocatImage from '../../utilities/octodex/dojocat.jpg'
+import baracktocat from '../../utilities/octodex/baracktocat.jpg'
 import privateinvestocatImage from '../../utilities/octodex/privateinvestocat.jpg'
 
 import './index.scss'
@@ -11,7 +11,7 @@ import './index.scss'
 const conf = remote.getGlobal('conf')
 const logger = remote.getGlobal('logger')
 
-let defaultImage = dojocatImage
+let defaultImage = baracktocat
 if (conf.get('enterprise:enable')) {
   defaultImage = privateinvestocatImage
   if (conf.get('enterprise:avatarUrl')) {
@@ -76,14 +76,14 @@ class LoginPage extends Component {
   renderControlSection () {
     const { authWindowStatus, loggedInUserInfo, userSessionStatus } = this.props
     const loggedInUserName = loggedInUserInfo ? loggedInUserInfo.profile : null
-    const welcomeMessage = 'Lepton is FREE. Like us in GitHub!'
+    const welcomeMessage = 'Lepton Gist Client (custom fork by sunnysidesounds)'
 
     if (userSessionStatus === 'IN_PROGRESS') {
       return (
         <div className='button-group-modal'>
           <ProgressBar active now={ 100 }/>
           <div className="login-page-footer">
-            <a href="https://github.com/hackjutsu/Lepton">{ welcomeMessage }</a>
+            <a href="https://github.com/sunnysidesounds/Lepton">{ welcomeMessage }</a>
           </div>
         </div>
       )
@@ -100,7 +100,7 @@ class LoginPage extends Component {
             { loggedInUserName ? `Continue as ${loggedInUserName}` : 'HAPPY CODING' }
           </Button>
           <div className="login-page-footer">
-            <a href="https://github.com/hackjutsu/Lepton">{ welcomeMessage }</a>
+            <a href="https://github.com/sunnysidesounds/Lepton">{ welcomeMessage }</a>
           </div>
         </div>
       )
@@ -122,7 +122,7 @@ class LoginPage extends Component {
             GitHub Login
           </Button>
           <div className="login-page-footer">
-            <a href="https://github.com/hackjutsu/Lepton">{ welcomeMessage }</a>
+            <a href="https://github.com/sunnysidesounds/Lepton">{ welcomeMessage }</a>
           </div>
         </div>
       )

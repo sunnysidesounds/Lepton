@@ -157,19 +157,6 @@ class NavigationPanel extends Component {
         <div className='tag-section-list'>
           <div
             className={
-              activeSection === 0 ? 'tag-section tag-section-active'
-                : activeSection === -1 ? 'tag-section'
-                  : 'tag-section tag-section-hidden'}>
-            <a href='#'
-              className='tag-section-title'
-              onClick={this.handleSectionClick.bind(this, 0)}>
-              Languages</a>
-            <div className='tag-section-content'>
-              { this.renderLangTags() }
-            </div>
-          </div>
-          <div
-            className={
               activeSection === 1 ? 'tag-section tag-section-active'
                 : activeSection === -1 ? 'tag-section'
                   : 'tag-section tag-section-hidden'}>
@@ -196,6 +183,19 @@ class NavigationPanel extends Component {
               className='tag-section-title'>Tags</a>
             <div className='tag-section-content'>
               { this.renderCustomTags() }
+            </div>
+          </div>
+          <div
+            className={
+              activeSection === 0 ? 'tag-section tag-section-active'
+                : activeSection === -1 ? 'tag-section'
+                  : 'tag-section tag-section-hidden'}>
+            <a href='#'
+              className='tag-section-title'
+              onClick={this.handleSectionClick.bind(this, 0)}>
+              Languages</a>
+            <div className='tag-section-content'>
+              { this.renderLangTags() }
             </div>
           </div>
         </div>
