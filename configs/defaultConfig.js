@@ -33,6 +33,7 @@ module.exports = {
     },
     "shortcuts": {
         "keyShortcutForSearch": "Shift+Space",
+        "keyShortcutForSearchInPage": "CommandOrControl+Shift+F",
         "keyNewGist": "CommandOrControl+N",
         "keyEditGist": "CommandOrControl+E",
         "keyDeleteGist": "CommandOrControl+Delete",

@@ -9,6 +9,7 @@ import HumanReadableTime from 'human-readable-time'
 import Moment from 'moment'
 import { notifySuccess, notifyFailure } from '../../utilities/notifier'
 import React, { Component } from 'react'
+import { FindInPage } from 'electron-find'
 import {
   addLangPrefix as Prefixed,
   descriptionParser,
@@ -44,6 +45,13 @@ const logger = remote.getGlobal('logger')
 const kIsExpanded = conf.get('snippet:expanded')
 const kTabLength = conf.get('editor:tabSize')
 
+const findInPage = new FindInPage(remote.getCurrentWebContents(), {
+  preload: true,
+  offsetTop: 6,
+  offsetRight: 10,
+  boxBgColor: 'rgb(20, 20, 20)'
+})
+
 class Snippet extends Component {
   componentDidMount () {
     ipcRenderer.on('edit-gist-renderer', () => {
@@ -54,6 +62,9 @@ class Snippet extends Component {
     })
     ipcRenderer.on('delete-gist', () => {
       this.showDeleteModal()
+    })
+    ipcRenderer.on('on-find', (e, args) => {
+      findInPage.openFindWindow()
     })
   }
 

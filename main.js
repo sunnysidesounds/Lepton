@@ -5,6 +5,7 @@ const windowStateKeeper = require('electron-window-state')
 const electronLocalshortcut = require('electron-localshortcut')
 const Menu = electron.Menu
 const app = electron.app
+const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow
 let willQuitApp = false
@@ -30,7 +31,7 @@ logger.info(`\n\n----- ${appInfo.name} v${appInfo.version} ${os.platform()}-----
 logger.info(`[conf] Looking for .leptonrc at ${ path.join(app.getPath('home'), '.leptonrc') }`)
 logger.info('[conf] The resolved configuration is ...')
 for (const key of Object.getOwnPropertyNames(defaultConfig)) {
-  logger.info(`"${key}": ${JSON.stringify(nconf.get(key))}`)    
+  logger.info(`"${key}": ${JSON.stringify(nconf.get(key))}`)
 }
 
 let mainWindow = null
@@ -43,7 +44,7 @@ function createWindowAndAutoLogin () {
 
 function createWindow (autoLogin) {
   console.time('init')
-    // Load the previous state with fallback to defaults
+  // Load the previous state with fallback to defaults
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1100,
     defaultHeight: 800
@@ -71,7 +72,7 @@ function createWindow (autoLogin) {
     logger.debug('-----> registering login-page-ready listener')
     // Set up a one-time listener for 'login-page-ready'
     ipcMain.on('login-page-ready', () => {
-      logger.info('[signal] sending auto-login signal')        
+      logger.info('[signal] sending auto-login signal')
       mainWindow.webContents.send('auto-login')
       ipcMain.removeAllListeners('login-page-ready')
     })
@@ -124,7 +125,15 @@ function createWindow (autoLogin) {
     } else {
       mainWindow = null
     }
-  });
+  })
+
+  mainWindow.on('focus', () => {
+    globalShortcut.register(shortcuts.keyShortcutForSearchInPage, function () {
+      if (mainWindow && mainWindow.webContents) {
+        mainWindow.webContents.send('on-find', '')
+      }
+    })
+  })
 
   const ContextMenu = require('electron-context-menu')
   ContextMenu({
@@ -151,15 +160,16 @@ app.on('window-all-closed', () => {
 })
 
 
-/* 'before-quit' is emitted when Electron receives 
+/* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
   willQuitApp = true
   try {
-    // If we launch the app and close it quickly, we might run into a 
+    // If we launch the app and close it quickly, we might run into a
     // situation where electronLocalshortcut is not initialized.
     if (mainWindow && electronLocalshortcut) {
       electronLocalshortcut.unregisterAll(mainWindow)
+      globalShortcut.unregister(shortcuts.keyShortcutForSearchInPage)
     }
   } catch (e) {
     logger.error(e)
@@ -226,7 +236,7 @@ function setUpApplicationMenu () {
         accelerator: shortcuts.keyAboutPage,
         click: (item, mainWindow) => mainWindow && mainWindow.send('about-page')
       },
-      {    
+      {
         label: 'Search',
         accelerator: shortcuts.keyShortcutForSearch,
         click: (item, mainWindow) => mainWindow && mainWindow.send('search-gist')
@@ -316,7 +326,7 @@ function initGlobalLogger () {
   const logFile = new Date().toISOString().replace(/:/g, '.') + '.log'
   const logFilePath = path.join(logFolder, logFile)
   logger.add(logger.transports.File, {
-      json: false,
+    json: false,
       exitOnError: false,
       filename: logFilePath,
       timestamp: true })
