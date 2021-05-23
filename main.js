@@ -59,10 +59,10 @@ function createWindow (autoLogin) {
     height: mainWindowState.height,
     x: mainWindowState.x,
     y: mainWindowState.y,
-    minWidth: 636,
-    minHeight: 609,
+    minWidth: 736,
+    minHeight: 709,
     // titleBarStyle: 'hidden',
-    backgroundColor: '#808080',
+    backgroundColor: 'rgb(25, 25, 25)',
     show: false,
     icon: path.join(__dirname, '/icon/icon.png'),
     webPreferences
