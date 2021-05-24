@@ -338,6 +338,13 @@ class Snippet extends Component {
     })
   }
 
+  handleGistDownloadClicked (snippet, file) {
+    console.log(snippet)
+    console.log(file)
+    ipcRenderer.send('download-item', { url: file.raw_url })
+    notifySuccess('Downloaded', 'File has been downloaded')
+  }
+
   handleCopyGistLinkClicked (snippet, file) {
     const link = snippet.details.html_url + '#file-' + file.filename.replace(/\./g, '-').toLowerCase()
     clipboard.writeText(link)
@@ -533,6 +540,12 @@ class Snippet extends Component {
                 <span>{ gistFile.filename }</span>
               </a>
               <div className='file-header-controls'>
+                <a
+                  href='#'
+                  className='file-header-control'
+                  onClick={ this.handleGistDownloadClicked.bind(this, activeSnippet, gistFile) }>
+                  DOWNLOAD
+                </a>
                 <a
                   href='#'
                   className='file-header-control'

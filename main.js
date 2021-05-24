@@ -7,6 +7,7 @@ const Menu = electron.Menu
 const app = electron.app
 const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
+const { download } = require('electron-dl');
 const BrowserWindow = electron.BrowserWindow
 let willQuitApp = false
 
@@ -84,6 +85,11 @@ function createWindow (autoLogin) {
 
   ipcMain.on('session-destroyed', () => {
     mainWindow.setTouchBar(null)
+  })
+
+  ipcMain.on('download-item', async (event, {url}) => {
+    const win = BrowserWindow.getFocusedWindow()
+    console.log(await download(win, url))
   })
 
   // Let us register listeners on the window, so we can update the state

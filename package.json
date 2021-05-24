@@ -66,6 +66,7 @@
     "codemirror": "^5.42.0",
     "codemirror-one-dark-theme": "^1.1.1",
     "electron-context-menu": "^2.0.1",
+    "electron-dl": "^3.2.1",
     "electron-find": "^1.0.6",
     "electron-is-dev": "^1.0.0",
     "electron-json-storage-sync": "^1.1.1",
