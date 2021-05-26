@@ -1,7 +1,7 @@
 .menu-panel {
   padding: 4px 7px;
   float: left;
-  width: 140px;
+  width: 150px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -69,6 +69,10 @@
     display: flex;
     flex-direction: column;
     position: relative;
+  }
+
+  .pinned-spacer {
+    padding-top: 15px;
   }
 
   .tag-section-list {
@@ -152,9 +156,36 @@
   }
 }
 
+.pinned-file-column {
+  padding-bottom: 5px;
+}
+
 .pinned-tags-modal {
   .pin-tag-table {
     width: 100%;
+  }
+
+  .pin-file-table {
+    width: 100%;
+  }
+
+  .modal-dialog {
+    width: 98vw;
+  }
+
+  .modal-body {
+    margin: 0px 35px;
+  }
+
+  .pinned-title {
+    border-bottom: 1px solid #3a3b41;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    color: #3a3b41;
+  }
+
+  .pinned-files-row {
+    padding-top: 30px;
   }
 
   .font-style-base {
@@ -169,6 +200,20 @@
   }
 
   .gist-tag-pinned {
+    @extend .font-style-base;
+    margin: 5px;
+    color: rgb(3, 123, 183);
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .gist-file-not-pinned {
+    @extend .font-style-base;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .gist-file-pinned {
     @extend .font-style-base;
     margin: 5px;
     color: rgb(3, 123, 183);

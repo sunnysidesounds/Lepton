@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Row } from 'react-bootstrap'
 import { parseLangName as Resolved } from '../../utilities/parser'
 import { remote } from 'electron'
 import React, { Component } from 'react'
@@ -10,12 +10,15 @@ import {
   selectGist,
   selectGistTag,
   updatePinnedTags,
-  updatePinnedTagsModalStatus
+  updatePinnedTagsModalStatus,
+  updatescrollRequestStatus
 } from '../../actions'
 
 import plusIcon from './plus.svg'
 
 import './index.scss'
+import { AiOutlineSave } from 'react-icons/ai'
+import { ImCancelCircle } from 'react-icons/im'
 
 const conf = remote.getGlobal('conf')
 const logger = remote.getGlobal('logger')
@@ -47,6 +50,26 @@ class NavigationPanel extends Component {
     updateActiveGistAfterClicked(gists, gistTags, key)
   }
 
+  handleFileClicked (key) {
+    const { gists, fetchSingleGist, selectGist } = this.props
+
+    let gistId = ''
+    Object.keys(gists).map(function (keyName, keyIndex) {
+      const gist = gists[keyName]
+      const filename = gist.brief.files[Object.keys(gist.brief.files)[0]].filename
+      if (key === filename) {
+        gistId = keyName
+      }
+    })
+    logger.info('A new gist is selected: ' + gistId)
+    if (!gists[gistId].details) {
+      logger.info('[Dispatch] fetchSingleGist ' + gistId)
+      fetchSingleGist(gists[gistId], gistId)
+    }
+    logger.info('[Dispatch] selectGist ' + gistId)
+    selectGist(gistId)
+  }
+
   renderPinnedTags () {
     const { pinnedTags, gistTags, activeGistTag } = this.props
     const pinnedTagList = []
@@ -66,6 +89,27 @@ class NavigationPanel extends Component {
 
     return pinnedTagList
   } // renderPinnedTags
+
+  renderPinnedFiles () {
+    const { pinnedTags, gistTags, activeGistTag } = this.props
+    const pinnedTagList = []
+
+    pinnedTags.forEach(tag => {
+      if (!gistTags[tag]) {
+        pinnedTagList.push(
+          <div key={ tag }>
+            <a className={ tag === activeGistTag ? 'active-gist-tag' : 'gist-tag' }
+              data-toggle="tooltip" title={tag}
+              onClick={ this.handleFileClicked.bind(this, tag) }>
+              { tag.startsWith('lang@') ? Resolved(tag) : tag }
+            </a>
+          </div>
+        )
+      }
+    })
+
+    return pinnedTagList
+  } // renderPinnedFiles
 
   renderLangTags () {
     const { gistTags, activeGistTag } = this.props
@@ -149,11 +193,6 @@ class NavigationPanel extends Component {
 
     return (
       <div className='gist-tag-section'>
-        <div className='starred-tag-section'>
-          <div className='tag-section-content'>
-            <a className='gist-tag' href={ `https://gist.${gitHubHost}/${userSession.profile.login}/starred` }>#starred</a>
-          </div>
-        </div>
         <div className='tag-section-list'>
           <div
             className={
@@ -171,7 +210,15 @@ class NavigationPanel extends Component {
               </a>
             </div>
             <div className='tag-section-content'>
-              { this.renderPinnedTags() }
+              <Row>
+                <h5 className='pinned-title'>Tags</h5>
+                { this.renderPinnedTags() }
+              </Row>
+              <Row className='pinned-spacer' />
+              <Row>
+                <h5 className='pinned-title'>Files</h5>
+                { this.renderPinnedFiles() }
+              </Row>
             </div>
           </div>
           <div className={
@@ -213,11 +260,55 @@ class NavigationPanel extends Component {
     })
   }
 
+  handleFileInPinnedTagsModalClicked (file) {
+    const { tmpPinnedTags } = this.state
+    tmpPinnedTags.has(file)
+      ? tmpPinnedTags.delete(file)
+      : tmpPinnedTags.add(file)
+    this.setState({
+      tmpPinnedTags: tmpPinnedTags
+    })
+  }
+
   closePinnedTagsModal () {
     this.props.updatePinnedTagsModalStatus('OFF')
     this.setState({
       tmpPinnedTags: new Set()
     })
+  }
+
+  renderAllFilesForPin () {
+    const { gists } = this.props
+    const { tmpPinnedTags } = this.state
+
+    const rows = []
+    const i = 1
+    const customFiles = []
+    Object.keys(gists).map(function (keyName, keyIndex) {
+      const gist = gists[keyName]
+      customFiles.push(gist)
+    })
+
+    customFiles.forEach(gist => {
+      const filename = gist.brief.files[Object.keys(gist.brief.files)[0]].filename
+      rows.push(
+        <tr key={ filename + '-file-' + i }>
+          <td key={ filename } className="pinned-file-column">
+            <a
+              onClick={this.handleFileInPinnedTagsModalClicked.bind(this, filename) }
+              className={ tmpPinnedTags.has(filename) ? 'gist-file-pinned' : 'gist-file-not-pinned' }>
+              { filename.startsWith('lang@') ? Resolved(filename) : filename }
+            </a>
+          </td></tr>)
+    })
+
+    return (
+      <table key='file-table' className='pin-file-table'>
+        <tbody>
+          { rows }
+        </tbody>
+      </table>
+    )
   }
 
   renderAllTagsForPin () {
@@ -247,15 +338,15 @@ class NavigationPanel extends Component {
           </a>
         </td>)
       if (i++ % 5 === 0) {
-        tagsForPinRows.push(<tr key={ i }>{ row }</tr>)
+        tagsForPinRows.push(<tr key={ tag + '-tag-' + i }>{ row }</tr>)
         row = []
       }
     })
 
-    row && tagsForPinRows.push(<tr key={ i }>{ row }</tr>)
+    row && tagsForPinRows.push(<tr key={ 'tag' + i }>{ row }</tr>)
 
     return (
-      <table className='pin-tag-table'>
+      <table key='tag-table' className='pin-tag-table'>
         <tbody>
           { tagsForPinRows }
         </tbody>
@@ -286,14 +377,21 @@ class NavigationPanel extends Component {
         show={ pinnedTagsModalStatus === 'ON' }
         onHide={ this.closePinnedTagsModal.bind(this) }>
         <Modal.Header closeButton>
-          <Modal.Title>Shortcuts</Modal.Title>
+          <Modal.Title>Pin tags or file</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { this.renderAllTagsForPin() }
+          <Row key='pinned-tags' className='pinned-tags-row'>
+            <h4 className='pinned-title'>Tags</h4>
+            { this.renderAllTagsForPin() }
+          </Row>
+          <Row key='pinned-files' className='pinned-files-row'>
+            <h4 className='pinned-title'>Files</h4>
+            { this.renderAllFilesForPin() }
+          </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={ this.closePinnedTagsModal.bind(this) }>Cancel</Button>
-          <Button bsStyle="default" onClick={ this.handlePinnedTagSaved.bind(this) }>Save</Button>
+          <Button bsStyle="default" onClick={ this.handlePinnedTagSaved.bind(this) }><AiOutlineSave /> Save</Button>
+          <Button onClick={ this.closePinnedTagsModal.bind(this) }><ImCancelCircle />Cancel</Button>
         </Modal.Footer>
       </Modal>
     )
@@ -318,7 +416,6 @@ class NavigationPanel extends Component {
           reSyncUserGists = { reSyncUserGists }
           launchAuthWindow = { launchAuthWindow }
         />
-        <hr/>
         { this.renderTagSection() }
         { this.renderPinnedTagsModal() }
       </div>
